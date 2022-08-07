@@ -1,13 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, DateField
-from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import DataRequired, Length, Email, EqualTo, NumberRange
 
 
 class RegistrationForm(FlaskForm):
     username = StringField('Employee Name',
                            validators=[DataRequired(), Length(min=2, max=20)])
     phone_no = IntegerField('Phone No',
-                           validators=[DataRequired()])
+                           validators=[DataRequired(), Length(min=10, max=13)])
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
     creation_date = StringField('CreationDate', validators=[DataRequired()])
@@ -23,6 +23,19 @@ class RegistrationForm(FlaskForm):
     is_active = BooleanField('isActive')
     submit = SubmitField('Register')
 
+
+class EmployeeDetailsForm(FlaskForm):
+    emp_id = StringField('emp_id',
+                           validators=[DataRequired()])
+    emp_address = StringField('emp_address',
+                           validators=[DataRequired(), Length(min=20, max=150)])
+    emp_joining_date = StringField('Joining Date')
+    emp_resigning_date = StringField('Resigning Date')
+    emp_prev_company = StringField('Employyees Previous Company')
+    emp_joining_salary = StringField('emp_joining_salary', validators=[DataRequired()])
+    emp_current_salary = StringField('emp_current_salary', validators=[DataRequired()])
+    emp_adhaar_no = StringField('emp_adhaar_no', validators=[Length(min=12, max=12)])
+    submit = SubmitField('Save Employee Details')
 
 class LoginForm(FlaskForm):
     email = StringField('Email',

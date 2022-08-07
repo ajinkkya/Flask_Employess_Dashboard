@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, EmployeeDetailsForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
@@ -39,6 +39,14 @@ def register():
         return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)
 
+
+@app.route("/empDetails", methods=['GET', 'POST'])
+def empDetails():
+    form = EmployeeDetailsForm()
+    if form.validate_on_submit():
+        flash(f'Details Updated for Emp ID - {form.emp_id.data}!', 'success')
+        return redirect(url_for('home'))
+    return render_template('empDetails.html', title='Employees Details', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
