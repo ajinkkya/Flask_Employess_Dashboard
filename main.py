@@ -1,11 +1,13 @@
+from urllib import response
 from config import *
 
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return '<h1>Hello, World!<h1>'
 
 # Create - 'Crud'
 # Endpoint for "Insert Record"
@@ -31,16 +33,27 @@ def insert():
                 if emp_id and emp_name and emp_phone_no and emp_email and cration_date and is_active:
                     cur.execute('INSERT INTO employees(EMP_ID, EMP_NAME, emp_phone_no, EMP_EMAIL_ID, CREATION_DATE, IS_ACTIVE) VALUES (%s, %s, %s, %s, %s, %s)',
                                 (emp_id, emp_name, emp_phone_no, emp_email, cration_date, is_active))
-                    
-                    
                     conn.commit()
+                    success_output = {
+                        "Massage" : f'For EMP ID - "{emp_id}", named - "{emp_name}". Record is submitted in Database successfully!',
+                        "Response Code" : 200,
+                        "Status" : "Success"
+                    }
+                    return make_response(jsonify(success_output), 200)
+                    
 
     except Exception as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
-    return f'For EMP ID - "{emp_id}", named - "{emp_name}". Record is submitted in Database successfully!'
+    failed_output = {
+        "Massage" : f'For EMP ID - "{emp_id}", named - "{emp_name}". Record is failed to submit in Database!',
+        "Response Code" : 500,
+        "Status" : "Failed"
+    }
+    return make_response(jsonify(failed_output), 500)            
+    
 
 # Read - 'cRud'
 # Endpoint for "Read Record"
@@ -69,13 +82,20 @@ def read():
                         "Creation Date": record['creation_date'],
                         "Is_Active": record['is_active']
                     }
+                return make_response(jsonify(recordDict), 200)
 
     except Exception as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
-    return jsonify(recordDict)
+    failed_output = {
+        "Massage" : f'For EMP ID - "{emp_id}", Record is failed to read from Database!',
+        "Response Code" : 500,
+        "Status" : "Failed"
+    }
+    return make_response(jsonify(failed_output), 500)
+    
 
 # Update - 'crUd'
 # Endpoint for "Update Record"
