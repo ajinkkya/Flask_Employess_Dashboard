@@ -48,7 +48,8 @@ def insert():
         if conn is not None:
             conn.close()
     failed_output = {
-        "Massage" : f'For EMP ID - "{emp_id}", named - "{emp_name}". Record is failed to submit in Database!',
+        "Massage" : f'For EMP ID - {emp_id}, named - {emp_name}. Record is failed to submit in Database!',
+        "Reason" : f"{emp_id} is already assigned as Primary key in Emp ID Column in Databse, Try Diffrent Emp ID",
         "Response Code" : 500,
         "Status" : "Failed"
     }
@@ -90,8 +91,9 @@ def read():
         if conn is not None:
             conn.close()
     failed_output = {
-        "Massage" : f'For EMP ID - "{emp_id}", Record is failed to read from Database!',
+        "Massage" : f"For EMP ID - {emp_id}, Record is failed to read from Database!",
         "Response Code" : 500,
+        "Reason" : f"{emp_id} is not availabe in Database EMP ID Column",
         "Status" : "Failed"
     }
     return make_response(jsonify(failed_output), 500)
